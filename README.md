@@ -31,6 +31,8 @@ arabi mafi miya miya - ref
 
 A big dick nigga
 
+*snore* a7a
+
 [主歌]
 真情 像草原廣闊
 層層風雨 不能阻隔
