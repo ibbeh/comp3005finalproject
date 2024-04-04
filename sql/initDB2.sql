@@ -1,6 +1,6 @@
 CREATE TABLE Teams (
     team_id INTEGER PRIMARY KEY,
-    team_name VAR_CHAR(255) NOT NULL
+    team_name VARCHAR(255) NOT NULL
 );
 
 
@@ -11,13 +11,19 @@ CREATE TABLE Matches (
     competition_id INTEGER,
     season_id INTEGER,
     home_team_id INTEGER,
+    home_manager_id INTEGER,
+    home_manager_name VARCHAR(255),
     away_team_id INTEGER,
+    away_manager_id INTEGER,
+    away_manager_name VARCHAR(255),
     home_score INTEGER,
     away_score INTEGER,
     match_week INTEGER,
     competition_stage_id INTEGER,
     stadium_id INTEGER,
+    stadium_name VARCHAR(255),
     referee_id INTEGER,
+    referee_name VARCHAR(255),
     FOREIGN KEY (competition_id, season_id) REFERENCES Competitions(competition_id, season_id),
     FOREIGN KEY (home_team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (away_team_id) REFERENCES Teams(team_id)
