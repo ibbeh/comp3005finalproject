@@ -9,7 +9,7 @@ This project involves designing and implementing a database to store and query a
 - Abdulla Abdalla (101259092)
 - Ahmed Elnimah (10127369)
 
-**Last Updated:** 2024-04-02
+**Last Updated:** 2024-04-12
 
 
 ## Prerequisites
