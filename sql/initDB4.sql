@@ -125,7 +125,7 @@ CREATE TABLE Events (
     season_id INTEGER,
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
-    FOREIGN KEY (player_id) REFERENCES Players(player_id)
+    FOREIGN KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
 
@@ -145,7 +145,7 @@ CREATE TABLE Player_Statistics (
     competition_id INTEGER,
     season_id INTEGER,
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
-    FOREIGN KEY (player_id) REFERENCES Players(player_id)
+    FOREIGN KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
 CREATE TABLE Team_Statistics (
