@@ -184,6 +184,22 @@ CREATE TABLE Tackles (
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
+CREATE TABLE Clearences (
+    event_id INTEGER PRIMARY KEY,
+    under_pressure BOOLEAN,
+    body_part VARCHAR (255),
+    play_pattern VARCHAR(255),
+    is_out BOOLEAN,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+CREATE TABLE Interceptions (
+    event_id INTEGER PRIMARY KEY,
+    outcome VARCHAR(255),
+    play_pattern VARCHAR(255),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
 --PENDING APPROVAL
 CREATE TABLE Passes (
     event_id INTEGER PRIMARY KEY,
@@ -195,6 +211,7 @@ CREATE TABLE Passes (
     end_location_x DECIMAL(5,2),
     end_location_y DECIMAL(5,2),
     recipient_id INTEGER,
+    body_part VARCHAR (255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (recipient_id) REFERENCES Players(player_id)
 );
