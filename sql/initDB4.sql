@@ -34,6 +34,14 @@ CREATE TABLE Stadiums (
     FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
 
+--FINISHED
+CREATE TABLE Referees (
+    referee_id INT PRIMARY KEY,
+    referee_name VARCHAR(255),
+    country_id INTEGER,
+    FOREIGN KEY (country_id) REFERENCES Countries(country_id)
+);
+
 
 --FINISHED
 CREATE TABLE Teams (
@@ -93,14 +101,6 @@ CREATE TABLE Matches (
     FOREIGN KEY (home_team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (away_team_id) REFERENCES Teams(team_id)
 
-);
-
---FINISHED
-CREATE TABLE Referees (
-    referee_id INT PRIMARY KEY,
-    referee_name VARCHAR(255),
-    country_id INTEGER,
-    FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
 
 --PENDING APPROVAL
