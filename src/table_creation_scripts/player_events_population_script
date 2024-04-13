@@ -1,81 +1,115 @@
 import json
-import sqlite3
+import psycopg2
+from psycopg2 import sql
 
-def connect_db():
-    return sqlite3.connect('path_to_your_database.db')
+# Database connection parameters
+db_params = {
+    "dbname": "your_dbname",
+    "user": "your_username",
+    "password": "your_password",
+    "host": "your_host"
+}
 
-def insert_player(cursor, player):
-    query = """
-    INSERT INTO Players (player_id, player_name, nickname, country_id, jersey_number)
-    VALUES (?, ?, ?, ?, ?)
-    ON CONFLICT(player_id) DO NOTHING;
-    """
-    cursor.execute(query, (player['player_id'], player['player_name'], player['player_nickname'], player['country']['id'], player['jersey_number']))
+# Connect to the PostgreSQL database
+conn = psycopg2.connect(**db_params)
+cursor = conn.cursor()
 
-def insert_position(cursor, player_id, position, match_id):
-    query = """
-    INSERT INTO Positions (player_id, position_id, position, from_time, to_time, from_period, to_period, start_reason, end_reason, match_id)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-    """
-    cursor.execute(query, (player_id, position['position_id'], position['position'], position['from'], position['to'], position['from_period'], position['to_period'], position['start_reason'], position['end_reason'], match_id))
+# Function to insert data into a table
+def insert_data(table, data_dict):
+    keys = data_dict.keys()
+    values = [data_dict[key] for key in keys]
 
-def insert_event(cursor, event, match_id):
-    query = """
-    INSERT INTO Events (event_id, event_type, match_id, player_id, time)
-    VALUES (?, ?, ?, ?, ?);
-    """
-    cursor.execute(query, (event['event_id'], event['type'], match_id, event.get('player_id', None), event['time']))
+    query = sql.SQL("INSERT INTO {table} ({fields}) VALUES ({values}) ON CONFLICT DO NOTHING")
+        .format(
+            table=sql.Identifier(table),
+            fields=sql.SQL(', ').join(map(sql.Identifier, keys)),
+            values=sql.SQL(', ').join(sql.Placeholder() * len(values))
+        )
+    cursor.execute(query, values)
 
-def insert_goal(cursor, event):
-    query = """
-    INSERT INTO Goals (event_id, goal_type, assist_event_id, shot_id)
-    VALUES (?, ?, ?, ?);
-    """
-    cursor.execute(query, (event['event_id'], event['goal_type'], event.get('assist_event_id'), event['shot_id']))
-
-def insert_penalty(cursor, event):
-    query = """
-    INSERT INTO Penalties (event_id, is_scored)
-    VALUES (?, ?);
-    """
-    cursor.execute(query, (event['event_id'], event['is_scored']))
-
-def process_lineup(cursor, lineup):
-    for team in lineup:
-        for player in team['lineup']:
-            insert_player(cursor, player)
-            for position in player['positions']:
-                insert_position(cursor, player['player_id'], position, team['match_id'])
-
-def process_events(cursor, events):
-    for event in events:
-        insert_event(cursor, event, event['match_id'])
-        if event['type'] == 'goal':
-            insert_goal(cursor, event)
-        elif event['type'] == 'penalty':
-            insert_penalty(cursor, event)
-
-def load_json(file_path):
+# Example of parsing a JSON file and inserting data into the database
+def process_json(file_path):
     with open(file_path, 'r') as file:
-        return json.load(file)
+        data = json.load(file)
 
-def main():
-    conn = connect_db()
-    cursor = conn.cursor()
-    
-    try:
-        lineup_data = load_json('path_to_lineup_file.txt')
-        events_data = load_json('path_to_events_file.txt')
-        
-        process_lineup(cursor, lineup_data)
-        process_events(cursor, events_data)
-        
-        conn.commit()
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        conn.rollback()
-    finally:
-        conn.close()
+    # Insert match information
+    for match in data:
+        match_data = {
+            "match_id": match["match_id"],
+            "match_date": match["match_date"],
+            "kick_off": match["kick_off"],
+            "season_id": match["season"]["season_id"],
+            "competition_id": match["competition"]["competition_id"],
+            "home_team_id": match["home_team"]["home_team_id"],
+            "away_team_id": match["away_team"]["away_team_id"],
+            "home_score": match["home_score"],
+            "away_score": match["away_score"],
+            "match_week": match["match_week"],
+            "competition_stage_id": match["competition_stage"]["id"],
+            "stadium_id": match["stadium"]["id"],
+            "referee_id": match["referee"]["id"]
+        }
+        insert_data("Matches", match_data)
 
-if __name__ == "__main__":
-    main()
+        # Insert referee data
+        referee_data = {
+            "referee_id": match["referee"]["id"],
+            "referee_name": match["referee"]["name"],
+            "country_id": match["referee"]["country"]["id"]
+        }
+        insert_data("Referees", referee_data)
+
+        # Process teams (you would need similar handling for teams, stadiums, etc.)
+        # Process each player in the lineup
+        for team in ["home_team", "away_team"]:
+            for player in match[team]["lineup"]:
+                player_data = {
+                    "player_id": player["player_id"],
+                    "player_name": player["player_name"],
+                    "player_nickname": player.get("player_nickname"),
+                    "jersey_number": player["jersey_number"],
+                    "country_id": player["country"]["id"],
+                    "team_id": match[team][team+"_id"],
+                    "position_id": None,  # Assuming this gets updated during event processing
+                    "num_matches_played": 1  # This needs proper management, maybe a separate update query
+                }
+                insert_data("Players", player_data)
+
+                # If positions are detailed in events or elsewhere, insert or update them separately
+
+        # Process events (goals, cards, etc.)
+        for event in match["events"]:
+            event_data = {
+                "event_id": event["id"],
+                "match_id": match["match_id"],
+                "type": event["type"],
+                "period": event["period"],
+                "timestamp": event["timestamp"],
+                "minute": event["minute"],
+                "second": event["second"],
+                "team_id": event["team_id"],
+                "player_id": event["player_id"],
+                "location_x": event.get("location_x"),
+                "location_y": event.get("location_y")
+            }
+            insert_data("Events", event_data)
+
+            # Further processing based on event type (e.g., goals, cards, substitutions)
+            if event["type"] == "goal":
+                goal_data = {
+                    "event_id": event["id"],
+                    "goal_type": event["goal_type"],
+                    "assist_event_id": event.get("assist_id"),
+                    "shot_id": event.get("shot_id")
+                }
+                insert_data("Goals", goal_data)
+
+            # Other event-specific tables (passes, tackles, shots, etc.) can be handled similarly
+
+# Process each JSON file
+process_json("/path/to/your/json/file.json")
+
+# Commit changes and close the connection
+conn.commit()
+cursor.close()
+conn.close()
