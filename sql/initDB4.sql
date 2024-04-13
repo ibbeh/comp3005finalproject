@@ -175,6 +175,18 @@ CREATE TABLE Substitutions (
     FOREIGN KEY (player_in_id) REFERENCES Players(player_id)
 );
 
+--PENDING APPROVAL
+CREATE TABLE Shots (
+    event_id VARCHAR(255) PRIMARY KEY,
+    outcome BOOLEAN,
+    first_time BOOLEAN,
+    shot_type VARCHAR(255),
+    body_part VARCHAR(255),
+    shot_location_x DECIMAL(5,2),
+    shot_location_y DECIMAL(5,2),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
 CREATE TABLE xGoals (
     player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
@@ -318,20 +330,6 @@ CREATE TABLE Offsides (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
-
-
---PENDING APPROVAL
-CREATE TABLE Shots (
-    event_id VARCHAR(255) PRIMARY KEY,
-    outcome BOOLEAN,
-    first_time BOOLEAN,
-    shot_type VARCHAR(255),
-    body_part VARCHAR(255),
-    shot_location_x DECIMAL(5,2),
-    shot_location_y DECIMAL(5,2),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id)
-);
-
 
 --PENDING APPROVAL
 CREATE TABLE Dribbles (
