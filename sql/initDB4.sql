@@ -210,7 +210,9 @@ CREATE TABLE Throw_Ins (
 --PENDING APPROVAL
 CREATE TABLE Ball_Receipts (
     event_id INTEGER PRIMARY KEY,
+    pass_from_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
+    FOREIGN KEY (pass_from_id) REFERENCES Events(event_id)
 );
 
 --PENDING APPROVAL
