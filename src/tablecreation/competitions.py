@@ -1,7 +1,7 @@
 import json
 import psycopg2
 
-# Database connection parameters
+#Database connection parameters
 host = "localhost"
 database = "FUT"
 user = input("DB User: ")
