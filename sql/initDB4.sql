@@ -1,6 +1,6 @@
 --FINISHED
 CREATE TABLE Competitions (
-    compeition_id  INTEGER,
+    competition_id  INTEGER,
     season_id INTEGER,
     country_name VARCHAR(255),
     competition_name VARCHAR(255),
