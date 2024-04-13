@@ -1,115 +1,73 @@
 import json
+import os
 import psycopg2
-from psycopg2 import sql
+from psycopg2.extras import execute_values
 
-# Database connection parameters
-db_params = {
-    "dbname": "your_dbname",
-    "user": "your_username",
-    "password": "your_password",
-    "host": "your_host"
-}
+def connect_db(host, dbname, user, password):
+    conn = psycopg2.connect(host=host, dbname=dbname, user=user, password=password)
+    return conn
 
-# Connect to the PostgreSQL database
-conn = psycopg2.connect(**db_params)
-cursor = conn.cursor()
+def insert_data(conn, table, data):
+    if data:
+        columns = ', '.join(data[0].keys())
+        values = [[value for value in entry.values()] for entry in data]
+        placeholders = ', '.join(['%s'] * len(data[0]))
+        insert_query = f"INSERT INTO {table} ({columns}) VALUES %s ON CONFLICT (player_id) DO NOTHING"
+        cursor = conn.cursor()
+        execute_values(cursor, insert_query, values)
+        conn.commit()
+        cursor.close()
 
-# Function to insert data into a table
-def insert_data(table, data_dict):
-    keys = data_dict.keys()
-    values = [data_dict[key] for key in keys]
-
-    query = sql.SQL("INSERT INTO {table} ({fields}) VALUES ({values}) ON CONFLICT DO NOTHING")
-        .format(
-            table=sql.Identifier(table),
-            fields=sql.SQL(', ').join(map(sql.Identifier, keys)),
-            values=sql.SQL(', ').join(sql.Placeholder() * len(values))
-        )
-    cursor.execute(query, values)
-
-# Example of parsing a JSON file and inserting data into the database
-def process_json(file_path):
-    with open(file_path, 'r') as file:
+def parse_json(json_file_path):
+    with open(json_file_path, 'r') as file:
         data = json.load(file)
+    return data
 
-    # Insert match information
-    for match in data:
-        match_data = {
-            "match_id": match["match_id"],
-            "match_date": match["match_date"],
-            "kick_off": match["kick_off"],
-            "season_id": match["season"]["season_id"],
-            "competition_id": match["competition"]["competition_id"],
-            "home_team_id": match["home_team"]["home_team_id"],
-            "away_team_id": match["away_team"]["away_team_id"],
-            "home_score": match["home_score"],
-            "away_score": match["away_score"],
-            "match_week": match["match_week"],
-            "competition_stage_id": match["competition_stage"]["id"],
-            "stadium_id": match["stadium"]["id"],
-            "referee_id": match["referee"]["id"]
-        }
-        insert_data("Matches", match_data)
-
-        # Insert referee data
-        referee_data = {
-            "referee_id": match["referee"]["id"],
-            "referee_name": match["referee"]["name"],
-            "country_id": match["referee"]["country"]["id"]
-        }
-        insert_data("Referees", referee_data)
-
-        # Process teams (you would need similar handling for teams, stadiums, etc.)
-        # Process each player in the lineup
-        for team in ["home_team", "away_team"]:
-            for player in match[team]["lineup"]:
-                player_data = {
-                    "player_id": player["player_id"],
-                    "player_name": player["player_name"],
-                    "player_nickname": player.get("player_nickname"),
-                    "jersey_number": player["jersey_number"],
-                    "country_id": player["country"]["id"],
-                    "team_id": match[team][team+"_id"],
-                    "position_id": None,  # Assuming this gets updated during event processing
-                    "num_matches_played": 1  # This needs proper management, maybe a separate update query
-                }
-                insert_data("Players", player_data)
-
-                # If positions are detailed in events or elsewhere, insert or update them separately
-
-        # Process events (goals, cards, etc.)
-        for event in match["events"]:
-            event_data = {
-                "event_id": event["id"],
-                "match_id": match["match_id"],
-                "type": event["type"],
-                "period": event["period"],
-                "timestamp": event["timestamp"],
-                "minute": event["minute"],
-                "second": event["second"],
-                "team_id": event["team_id"],
-                "player_id": event["player_id"],
-                "location_x": event.get("location_x"),
-                "location_y": event.get("location_y")
+def process_players(json_data):
+    players = []
+    for team in json_data:
+        team_id = team['team_id']
+        for player in team['lineup']:
+            player_data = {
+                'player_id': player['player_id'],
+                'player_name': player['player_name'],
+                'player_nickname': player.get('player_nickname'),
+                'jersey_number': player['jersey_number'],
+                'country_id': player['country']['id'],
+                'team_id': team_id,
+                'position_id': player['positions'][0]['position_id'] if player['positions'] else None
+                # Assume each player has at least one position logged, adjust if necessary
             }
-            insert_data("Events", event_data)
+            players.append(player_data)
+    return players
 
-            # Further processing based on event type (e.g., goals, cards, substitutions)
-            if event["type"] == "goal":
-                goal_data = {
-                    "event_id": event["id"],
-                    "goal_type": event["goal_type"],
-                    "assist_event_id": event.get("assist_id"),
-                    "shot_id": event.get("shot_id")
-                }
-                insert_data("Goals", goal_data)
+def main():
+    # Database credentials
+    host = 'localhost'
+    dbname = 'FUTDB'
+    user = 'postgres'
+    password = 'pass'
 
-            # Other event-specific tables (passes, tackles, shots, etc.) can be handled similarly
+    # Connect to the database
+    conn = connect_db(host, dbname, user, password)
 
-# Process each JSON file
-process_json("/path/to/your/json/file.json")
+    # Directory path containing JSON files
+    directory_path = 'path_to_your_directory'
 
-# Commit changes and close the connection
-conn.commit()
-cursor.close()
-conn.close()
+    # Loop through each file in the directory
+    for filename in os.listdir(directory_path):
+        if filename.endswith('.json') and filename.isdigit():
+            json_file_path = os.path.join(directory_path, filename)
+            
+            # Parse JSON file
+            json_data = parse_json(json_file_path)
+            
+            # Process and insert player data
+            players = process_players(json_data)
+            insert_data(conn, 'Players', players)
+
+    # Close the database connection
+    conn.close()
+
+if __name__ == '__main__':
+    main()
