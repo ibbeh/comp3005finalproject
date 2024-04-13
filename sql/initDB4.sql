@@ -175,7 +175,7 @@ CREATE TABLE Goals (
     event_id VARCHAR(255) PRIMARY KEY,
     goal_type VARCHAR(255),
     assist_event_id VARCHAR(255),
-    shot_id INTEGER,
+    shot_id VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (assist_event_id) REFERENCES Events(event_id),
     FOREIGN KEY (shot_id) REFERENCES Events(event_id)
@@ -184,15 +184,15 @@ CREATE TABLE Goals (
 --PENDING APPROVAL
 CREATE TABLE Penalties (
     event_id VARCHAR(255) PRIMARY KEY,
-    goal_id INTEGER NULL,
+    goal_id VARCHAR(255) NULL,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (goal_id) REFERENCES Goals(event_id)
 );
 
 CREATE TABLE Free_Kick (
     event_id VARCHAR(255) PRIMARY KEY,
-    goal_id INTEGER NULL,
-    pass_id INTEGER NULL,
+    goal_id VARCHAR(255) NULL,
+    pass_id VARCHAR(255) NULL,
     body_part VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (goal_id) REFERENCES Goals(event_id),
@@ -209,7 +209,7 @@ CREATE TABLE Corners (
 
 CREATE TABLE Goal_Kick (
     event_id VARCHAR(255) PRIMARY KEY,
-    pass_id INTEGER NULL,
+    pass_id VARCHAR(255) NULL,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (pass_id) REFERENCES Events(event_id)
 );
@@ -281,7 +281,7 @@ CREATE TABLE Throw_Ins (
 --PENDING APPROVAL
 CREATE TABLE Ball_Receipts (
     event_id VARCHAR(255) PRIMARY KEY,
-    pass_from_id INTEGER,
+    pass_from_id VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (pass_from_id) REFERENCES Events(event_id)
 );
