@@ -145,6 +145,12 @@ CREATE TABLE Substitutions (
     FOREIGN KEY (player_out_id) INTEGER REFERENCES Players(player_id),
 );
 
+CREATE TABLE xGoals (
+    total_xg INTEGER PRIMARY KEY,
+    matches_played INTEGER,
+    FOREIGN KEY (player_id) INTEGER REFERENCES Players(player_id),
+);
+
 CREATE TABLE Goals (
     goal_id SERIAL PRIMARY KEY,
     goal_minute INTEGER,
