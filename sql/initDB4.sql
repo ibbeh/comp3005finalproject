@@ -332,3 +332,13 @@ CREATE TABLE Carries (
     end_location_y DECIMAL(5,2),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
+
+CREATE TABLE Injury_Stoppage (
+    event_id INTEGER PRIMARY KEY,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+CREATE TABLE Pressure (
+    event_id INTEGER PRIMARY KEY,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
