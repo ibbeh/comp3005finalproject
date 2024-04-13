@@ -1,6 +1,6 @@
 --FINISHED
 CREATE TABLE Competitions (
-    compeition_id  INTEGER,
+    competition_id  INTEGER,
     season_id INTEGER,
     country_name VARCHAR(255),
     competition_name VARCHAR(255),
@@ -143,6 +143,12 @@ CREATE TABLE Substitutions (
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (player_out_id) REFERENCES Players(player_id),
     FOREIGN KEY (player_in_id) REFERENCES Players(player_id)
+);
+
+CREATE TABLE xGoals (
+    total_xg numeric(5,2) PRIMARY KEY,
+    matches_played INTEGER,
+    FOREIGN KEY (player_id) INTEGER REFERENCES Players(player_id),
 );
 
 --PENDING APPROVAL
