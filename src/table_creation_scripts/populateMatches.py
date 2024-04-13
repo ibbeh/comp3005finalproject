@@ -20,6 +20,18 @@ def connect_to_db():
     print("Connection successful.")
     return conn
 
+def ensure_season_and_competition(conn, season_id, competition_id):
+    """Ensure that the season and competition exist in the database."""
+    cursor = conn.cursor()
+    # You will need the correct SQL based on your Seasons table schema
+    sql = """
+    INSERT INTO Seasons(season_id, competition_id) VALUES (%s, %s)
+    ON CONFLICT (season_id, competition_id) DO NOTHING;
+    """
+    cursor.execute(sql, (season_id, competition_id))
+    conn.commit()
+    cursor.close()
+
 def insert_match(conn, match):
     """Insert a match into the Matches table."""
     cursor = conn.cursor()
@@ -31,6 +43,9 @@ def insert_match(conn, match):
     ON CONFLICT (match_id) DO NOTHING;
     """
     try:
+        # Ensure season and competition are present
+        ensure_season_and_competition(conn, match['season']['season_id'], match['competition']['competition_id'])
+        
         cursor.execute(sql, (
             match['match_id'], match['match_date'], match['kick_off'], match['season']['season_id'],
             match['competition']['competition_id'], match['home_team']['home_team_id'],
@@ -43,6 +58,8 @@ def insert_match(conn, match):
         conn.commit()
     except KeyError as e:
         print(f"Missing key {e} in match data with ID {match['match_id']}. Skipping this match.")
+    except psycopg2.IntegrityError as e:
+        print(f"Database integrity error: {e}")
     cursor.close()
 
 def process_json_file(filepath):

@@ -22,7 +22,7 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (competition_id, season_id) 
 target_pairs = {(11, 4), (11, 42), (2, 44), (11, 90)}
 
 # Load and parse competitions.json
-with open('data/competitions.json', 'r', encoding='utf-8') as file:
+with open('../../data/competitions.json', 'r', encoding='utf-8') as file:
     competitions = json.load(file)
     for entry in competitions:
         comp_id = entry['competition_id']

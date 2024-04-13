@@ -44,9 +44,9 @@ def process_players(json_data):
 def main():
     # Database credentials
     host = 'localhost'
-    dbname = 'FUTDB'
+    dbname = 'FUT_STATS'
     user = 'postgres'
-    password = 'Kuwait$22'
+    password = 'postgres'
 
     # Connect to the database
     conn = connect_db(host, dbname, user, password)
