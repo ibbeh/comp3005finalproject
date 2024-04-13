@@ -66,7 +66,9 @@ CREATE TABLE Positions (
 
 --FINISHED
 CREATE TABLE Players (
-    player_id INT PRIMARY KEY,
+    player_id INTEGER,
+    season_id INTEGER,
+    competition_id INTEGER,
     player_name VARCHAR(255) NOT NULL,
     player_nickname VARCHAR(255),
     jersey_number INTEGER,
@@ -76,8 +78,11 @@ CREATE TABLE Players (
     num_matches_played INTEGER,
     FOREIGN KEY (position_id) REFERENCES Positions(position_id),
     FOREIGN KEY (country_id) REFERENCES Countries(country_id),
-    FOREIGN KEY (team_id)  REFERENCES Teams(team_id)
+    FOREIGN KEY (team_id) REFERENCES Teams(team_id),
+    FOREIGN KEY (season_id, competition_id) REFERENCES Seasons(season_id, competition_id),
+    PRIMARY KEY (player_id, season_id, competition_id)
 );
+
 
 
 --FINISHED
@@ -165,8 +170,10 @@ CREATE TABLE Substitutions (
 );
 
 CREATE TABLE xGoals (
-	player_id INTEGER,
+    player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
 
