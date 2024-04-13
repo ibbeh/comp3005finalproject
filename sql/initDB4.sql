@@ -1,25 +1,13 @@
---FINISHED
-CREATE TABLE Competitions (
-    competition_id  INTEGER,
+CREATE TABLE Seasons (
     season_id INTEGER,
-    country_name VARCHAR(255),
+    competition_id INTEGER,
     competition_name VARCHAR(255),
+    country_name VARCHAR(255),
     competition_gender VARCHAR(255),
     competition_youth BOOLEAN,
     competition_international BOOLEAN,
     season_name VARCHAR(255),
-    PRIMARY KEY (competition_id, season_id)
-);
-
-
---FINISHED
-CREATE TABLE Seasons (
-    season_id INTEGER PRIMARY KEY,
-    season_name VARCHAR(255),
-    start_date DATE,
-    end_date DATE,
-    competition_id INTEGER,
-    FOREIGN KEY competition_id REFERENCES Competitions(competition_id)
+    PRIMARY KEY (season_id, competition_id)
 );
 
 
@@ -33,7 +21,7 @@ CREATE TABLE Teams (
     team_gender VARCHAR(255),
     FOREIGN KEY (manager_id) REFERENCES Manager(manager_id)
     FOREIGN KEY (home_stadium_id) REFERENCES Stadium(home_stadium_id)
-    FOREIGN KEY (competition_id) REFERENCES Competitions(competition_id)
+    FOREIGN KEY (competition_id, season_id) REFERENCES Seasons(competition_id, season_id),
 );
 
 
@@ -70,7 +58,7 @@ CREATE TABLE Matches (
     stadium_id INTEGER,
     stadium_name VARCHAR(255),
     referee_id INTEGER,
-    FOREIGN KEY (competition_id, season_id) REFERENCES Competitions(competition_id, season_id),
+    FOREIGN KEY (competition_id, season_id) REFERENCES Seasons(competition_id, season_id),
     FOREIGN KEY (home_team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (away_team_id) REFERENCES Teams(team_id)
 
