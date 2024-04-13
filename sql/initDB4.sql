@@ -156,8 +156,10 @@ CREATE TABLE Goals (
     event_id INTEGER PRIMARY KEY,
     goal_type VARCHAR(255),
     assist_event_id INTEGER,
+    shot_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (assist_event_id) REFERENCES Events(event_id)
+    FOREIGN KEY (assist_event_id) REFERENCES Events(event_id),
+    FOREIGN KEY (shot_id) REFERENCES Events(event_id)
 );
 
 --PENDING APPROVAL
@@ -222,7 +224,11 @@ CREATE TABLE Cards (
 CREATE TABLE Fouls (
     event_id INTEGER PRIMARY KEY,
     foul_type VARCHAR(255),
+    player_fouled_id INTEGER,
+    player_fouling_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
+    FOREIGN KEY (player_fouled_id) REFERENCES Players(player_id)
+    FOREIGN KEY (player_fouling_id) REFERENCES Players(player_id)
 );
 
 --PENDING APPROVAL
@@ -236,6 +242,7 @@ CREATE TABLE Offsides (
 CREATE TABLE Shots (
     event_id INTEGER PRIMARY KEY,
     outcome BOOLEAN,
+    first_time BOOLEAN,
     shot_type VARCHAR(255),
     body_part VARCHAR(255),
     shot_location_x DECIMAL(5,2) 
