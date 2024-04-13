@@ -1,0 +1,81 @@
+import json
+import sqlite3
+
+def connect_db():
+    return sqlite3.connect('path_to_your_database.db')
+
+def insert_player(cursor, player):
+    query = """
+    INSERT INTO Players (player_id, player_name, nickname, country_id, jersey_number)
+    VALUES (?, ?, ?, ?, ?)
+    ON CONFLICT(player_id) DO NOTHING;
+    """
+    cursor.execute(query, (player['player_id'], player['player_name'], player['player_nickname'], player['country']['id'], player['jersey_number']))
+
+def insert_position(cursor, player_id, position, match_id):
+    query = """
+    INSERT INTO Positions (player_id, position_id, position, from_time, to_time, from_period, to_period, start_reason, end_reason, match_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    """
+    cursor.execute(query, (player_id, position['position_id'], position['position'], position['from'], position['to'], position['from_period'], position['to_period'], position['start_reason'], position['end_reason'], match_id))
+
+def insert_event(cursor, event, match_id):
+    query = """
+    INSERT INTO Events (event_id, event_type, match_id, player_id, time)
+    VALUES (?, ?, ?, ?, ?);
+    """
+    cursor.execute(query, (event['event_id'], event['type'], match_id, event.get('player_id', None), event['time']))
+
+def insert_goal(cursor, event):
+    query = """
+    INSERT INTO Goals (event_id, goal_type, assist_event_id, shot_id)
+    VALUES (?, ?, ?, ?);
+    """
+    cursor.execute(query, (event['event_id'], event['goal_type'], event.get('assist_event_id'), event['shot_id']))
+
+def insert_penalty(cursor, event):
+    query = """
+    INSERT INTO Penalties (event_id, is_scored)
+    VALUES (?, ?);
+    """
+    cursor.execute(query, (event['event_id'], event['is_scored']))
+
+def process_lineup(cursor, lineup):
+    for team in lineup:
+        for player in team['lineup']:
+            insert_player(cursor, player)
+            for position in player['positions']:
+                insert_position(cursor, player['player_id'], position, team['match_id'])
+
+def process_events(cursor, events):
+    for event in events:
+        insert_event(cursor, event, event['match_id'])
+        if event['type'] == 'goal':
+            insert_goal(cursor, event)
+        elif event['type'] == 'penalty':
+            insert_penalty(cursor, event)
+
+def load_json(file_path):
+    with open(file_path, 'r') as file:
+        return json.load(file)
+
+def main():
+    conn = connect_db()
+    cursor = conn.cursor()
+    
+    try:
+        lineup_data = load_json('path_to_lineup_file.txt')
+        events_data = load_json('path_to_events_file.txt')
+        
+        process_lineup(cursor, lineup_data)
+        process_events(cursor, events_data)
+        
+        conn.commit()
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        conn.rollback()
+    finally:
+        conn.close()
+
+if __name__ == "__main__":
+    main()
