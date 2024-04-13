@@ -121,6 +121,8 @@ CREATE TABLE Events (
     player_id INTEGER,
     location_x DECIMAL(5,2),
     location_y DECIMAL(5,2),
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
@@ -140,6 +142,8 @@ CREATE TABLE Player_Statistics (
 	player_id INTEGER,
     red_cards INTEGER,
     yellow_cards INTEGER,
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
@@ -152,6 +156,8 @@ CREATE TABLE Team_Statistics (
     passes_completed INTEGER,
     tackles INTEGER,
     shots_on_target INTEGER,
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (match_id) REFERENCES Matches(match_id)
 );
@@ -172,8 +178,6 @@ CREATE TABLE Substitutions (
 CREATE TABLE xGoals (
     player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
-    competition_id INTEGER,
-    season_id INTEGER,
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
 
