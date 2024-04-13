@@ -65,6 +65,7 @@ CREATE TABLE Players (
     country_id INTEGER,
     team_id INTEGER,
     position_id INTEGER,
+    num_matches_played INTEGER,
     FOREIGN KEY (position_id) REFERENCES Positions(position_id),
     FOREIGN KEY (country_id) REFERENCES Countries(country_id),
     FOREIGN KEY (team_id)  REFERENCES Teams(team_id)
@@ -104,7 +105,7 @@ CREATE TABLE Referees (
 
 --PENDING APPROVAL
 CREATE TABLE Events (
-    event_id SERIAL PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     match_id INTEGER,
     type VARCHAR(255),
     period INTEGER,
@@ -154,7 +155,7 @@ CREATE TABLE Team_Statistics (
 
 --PENDING APPROVAL
 CREATE TABLE Substitutions (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     player_out_id INTEGER,
     player_in_id INTEGER,
     reason VARCHAR(255),
@@ -166,15 +167,14 @@ CREATE TABLE Substitutions (
 CREATE TABLE xGoals (
 	player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
-    matches_played INTEGER,
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
 
 --PENDING APPROVAL
 CREATE TABLE Goals (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     goal_type VARCHAR(255),
-    assist_event_id INTEGER,
+    assist_event_id VARCHAR(255),
     shot_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (assist_event_id) REFERENCES Events(event_id),
@@ -183,14 +183,14 @@ CREATE TABLE Goals (
 
 --PENDING APPROVAL
 CREATE TABLE Penalties (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     goal_id INTEGER NULL,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (goal_id) REFERENCES Goals(event_id)
 );
 
 CREATE TABLE Free_Kick (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     goal_id INTEGER NULL,
     pass_id INTEGER NULL,
     body_part VARCHAR(255),
@@ -200,7 +200,7 @@ CREATE TABLE Free_Kick (
 );
 
 CREATE TABLE Corners (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     technique VARCHAR (255),
     body_part VARCHAR (255),
     outcome VARCHAR (255),
@@ -208,7 +208,7 @@ CREATE TABLE Corners (
 );
 
 CREATE TABLE Goal_Kick (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     pass_id INTEGER NULL,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (pass_id) REFERENCES Events(event_id)
@@ -217,21 +217,21 @@ CREATE TABLE Goal_Kick (
 
 --PENDING APPROVAL
 CREATE TABLE Saves (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
 --PENDING APPROVAL
 CREATE TABLE Tackles (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     outcome BOOLEAN,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 --PENDING APPROVAL
 CREATE TABLE Duels (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     type VARCHAR(255),
     outcome VARCHAR(255),
     under_pressure BOOLEAN,
@@ -239,7 +239,7 @@ CREATE TABLE Duels (
 );
 
 CREATE TABLE Clearences (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     under_pressure BOOLEAN,
     body_part VARCHAR (255),
     play_pattern VARCHAR(255),
@@ -248,7 +248,7 @@ CREATE TABLE Clearences (
 );
 
 CREATE TABLE Interceptions (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     outcome VARCHAR(255),
     play_pattern VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
@@ -256,7 +256,7 @@ CREATE TABLE Interceptions (
 
 --PENDING APPROVAL
 CREATE TABLE Passes (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     pass_type VARCHAR(255),
     successful BOOLEAN,
     length DECIMAL(5,2),
@@ -273,14 +273,14 @@ CREATE TABLE Passes (
 
 --PENDING APPROVAL
 CREATE TABLE Throw_Ins (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
 --PENDING APPROVAL
 CREATE TABLE Ball_Receipts (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     pass_from_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (pass_from_id) REFERENCES Events(event_id)
@@ -288,14 +288,14 @@ CREATE TABLE Ball_Receipts (
 
 --PENDING APPROVAL
 CREATE TABLE Cards (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     card_type VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 --PENDING APPROVAL
 CREATE TABLE Fouls (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     foul_type VARCHAR(255),
     player_fouling_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
@@ -304,14 +304,14 @@ CREATE TABLE Fouls (
 
 --PENDING APPROVAL
 CREATE TABLE Offsides (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
 --PENDING APPROVAL
 CREATE TABLE Shots (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     outcome BOOLEAN,
     first_time BOOLEAN,
     shot_type VARCHAR(255),
@@ -324,7 +324,7 @@ CREATE TABLE Shots (
 
 --PENDING APPROVAL
 CREATE TABLE Dribbles (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     success BOOLEAN,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
@@ -332,25 +332,25 @@ CREATE TABLE Dribbles (
 
 --PENDING APPROVAL
 CREATE TABLE Ball_Recovery (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
 --PENDING APPROVAL
 CREATE TABLE Carries (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     end_location_x DECIMAL(5,2),
     end_location_y DECIMAL(5,2),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 CREATE TABLE Injury_Stoppage (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 CREATE TABLE Pressure (
-    event_id INTEGER PRIMARY KEY,
+    event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
