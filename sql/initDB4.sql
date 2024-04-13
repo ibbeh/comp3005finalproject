@@ -365,3 +365,8 @@ CREATE TABLE Pressure (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
+
+CREATE TABLE Dribbled_Past (
+    event_id VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
