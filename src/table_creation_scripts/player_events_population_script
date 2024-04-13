@@ -46,7 +46,7 @@ def main():
     host = 'localhost'
     dbname = 'FUTDB'
     user = 'postgres'
-    password = 'pass'
+    password = 'Kuwait$22'
 
     # Connect to the database
     conn = connect_db(host, dbname, user, password)
