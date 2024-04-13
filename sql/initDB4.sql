@@ -34,6 +34,14 @@ CREATE TABLE Stadiums (
     FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
 
+--FINISHED
+CREATE TABLE Referees (
+    referee_id INT PRIMARY KEY,
+    referee_name VARCHAR(255),
+    country_id INTEGER,
+    FOREIGN KEY (country_id) REFERENCES Countries(country_id)
+);
+
 
 --FINISHED
 CREATE TABLE Teams (
@@ -58,7 +66,9 @@ CREATE TABLE Positions (
 
 --FINISHED
 CREATE TABLE Players (
-    player_id INT PRIMARY KEY,
+    player_id INTEGER,
+    season_id INTEGER,
+    competition_id INTEGER,
     player_name VARCHAR(255) NOT NULL,
     player_nickname VARCHAR(255),
     jersey_number INTEGER,
@@ -68,8 +78,11 @@ CREATE TABLE Players (
     num_matches_played INTEGER,
     FOREIGN KEY (position_id) REFERENCES Positions(position_id),
     FOREIGN KEY (country_id) REFERENCES Countries(country_id),
-    FOREIGN KEY (team_id)  REFERENCES Teams(team_id)
+    FOREIGN KEY (team_id) REFERENCES Teams(team_id),
+    FOREIGN KEY (season_id, competition_id) REFERENCES Seasons(season_id, competition_id),
+    PRIMARY KEY (player_id, season_id, competition_id)
 );
+
 
 
 --FINISHED
@@ -95,14 +108,6 @@ CREATE TABLE Matches (
 
 );
 
---FINISHED
-CREATE TABLE Referees (
-    referee_id INT PRIMARY KEY,
-    referee_name VARCHAR(255),
-    country_id INTEGER,
-    FOREIGN KEY (country_id) REFERENCES Countries(country_id)
-);
-
 --PENDING APPROVAL
 CREATE TABLE Events (
     event_id VARCHAR(255) PRIMARY KEY,
@@ -116,6 +121,8 @@ CREATE TABLE Events (
     player_id INTEGER,
     location_x DECIMAL(5,2),
     location_y DECIMAL(5,2),
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
@@ -135,6 +142,8 @@ CREATE TABLE Player_Statistics (
 	player_id INTEGER,
     red_cards INTEGER,
     yellow_cards INTEGER,
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (match_id) REFERENCES Matches(match_id),
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
@@ -147,6 +156,8 @@ CREATE TABLE Team_Statistics (
     passes_completed INTEGER,
     tackles INTEGER,
     shots_on_target INTEGER,
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (match_id) REFERENCES Matches(match_id)
 );
@@ -165,7 +176,7 @@ CREATE TABLE Substitutions (
 );
 
 CREATE TABLE xGoals (
-	player_id INTEGER,
+    player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
     FOREIGN KEY (player_id) REFERENCES Players(player_id)
 );
