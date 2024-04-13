@@ -238,6 +238,8 @@ CREATE TABLE Shots (
     outcome BOOLEAN,
     shot_type VARCHAR(255),
     body_part VARCHAR(255),
+    shot_location_x DECIMAL(5,2) 
+    shot_location_y DECIMAL(5,2)
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
