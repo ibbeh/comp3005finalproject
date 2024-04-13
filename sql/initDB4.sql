@@ -153,8 +153,34 @@ CREATE TABLE Goals (
 --PENDING APPROVAL
 CREATE TABLE Penalties (
     event_id INTEGER PRIMARY KEY,
-    is_scored BOOLEAN,
+    goal_id INTEGER NULL,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id),
+    FOREIGN KEY (goal_id) REFERENCES Goals(event_id)
+);
+
+CREATE TABLE Free_Kick (
+    event_id INTEGER PRIMARY KEY,
+    goal_id INTEGER NULL,
+    pass_id INTEGER NULL,
+    body_part VARCHAR(255),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id),
+    FOREIGN KEY (goal_id) REFERENCES Goals(event_id),
+    FOREIGN KEY (pass_id) REFERENCES Events(event_id)
+);
+
+CREATE TABLE Corners (
+    event_id INTEGER PRIMARY KEY,
+    technique VARCHAR (255)
+    body_part VARCHAR (255)
+    outcome VARCHAR (255)
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+CREATE TABLE Goal_Kick (
+    event_id INTEGER PRIMARY KEY,
+    pass_id INTEGER NULL,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+    FOREIGN KEY (pass_id) REFERENCES Events(event_id)
 );
 
 
@@ -169,6 +195,15 @@ CREATE TABLE Saves (
 CREATE TABLE Tackles (
     event_id INTEGER PRIMARY KEY,
     outcome BOOLEAN,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+--PENDING APPROVAL
+CREATE TABLE Duels (
+    event_id INTEGER PRIMARY KEY,
+    type VARCHAR(255)
+    outcome VARCHAR(255),
+    under_pressure BOOLEAN,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
@@ -231,10 +266,8 @@ CREATE TABLE Cards (
 CREATE TABLE Fouls (
     event_id INTEGER PRIMARY KEY,
     foul_type VARCHAR(255),
-    player_fouled_id INTEGER,
     player_fouling_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
-    FOREIGN KEY (player_fouled_id) REFERENCES Players(player_id)
     FOREIGN KEY (player_fouling_id) REFERENCES Players(player_id)
 );
 
