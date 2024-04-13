@@ -146,7 +146,7 @@ CREATE TABLE Substitutions (
 );
 
 CREATE TABLE xGoals (
-    total_xg numeric(5,2) PRIMARY KEY,
+    total_xg DECIMAL(5,2) PRIMARY KEY,
     matches_played INTEGER,
     FOREIGN KEY (player_id) INTEGER REFERENCES Players(player_id),
 );
