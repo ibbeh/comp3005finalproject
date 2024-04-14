@@ -191,6 +191,7 @@ CREATE TABLE Shots (
 CREATE TABLE Passes (
     event_id VARCHAR(255) PRIMARY KEY,
     pass_type VARCHAR(255),
+    pass_technique VARCHAR(255),
     successful BOOLEAN,
     length DECIMAL(5,2),
     angle DECIMAL(5,2),
