@@ -38,16 +38,16 @@ for event in events_by_id.values():
     # Handle substitutions
     if event_type == 'Substitution':
         player_out_id = event['player']['id']
-        player_in_id = event.get('replacement', {}).get('id')
-        reason = event.get('outcome', {}).get('name')
+        player_in_id = event.get('substitution', {}).get('replacement', {}).get('id')
+        reason = event.get('substitution', {}).get('reason', 'Unknown')  # Defaulting to 'Unknown' if not present
         cursor.execute("INSERT INTO Substitutions (event_id, player_out_id, player_in_id, reason) VALUES (%s, %s, %s, %s) ON CONFLICT (event_id) DO NOTHING;", (event_id, player_out_id, player_in_id, reason))
 
     # Handle shots
     elif event_type == 'Shot':
-        outcome = any(events_by_id[rel_event_id]['type']['name'] == 'Goal' for rel_event_id in event.get('related_events', []) if rel_event_id in events_by_id)
-        first_time = event.get('first_time', False)
-        shot_type = event.get('shot_type', {}).get('name')
-        body_part = event.get('body_part', {}).get('name')
+        outcome = 'Goal' if any(events_by_id.get(related_event_id, {}).get('type', {}).get('name') == 'Goal' for related_event_id in event.get('related_events', [])) else 'No Goal'
+        first_time = event.get('shot', {}).get('first_time', False)
+        shot_type = event.get('shot', {}).get('type', {}).get('name', 'Unknown')
+        body_part = event.get('shot', {}).get('body_part', {}).get('name', 'Unknown')
         location_x, location_y = event.get('location', [None, None])
         cursor.execute("INSERT INTO Shots (event_id, outcome, first_time, shot_type, body_part, shot_location_x, shot_location_y) VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (event_id) DO NOTHING;", (event_id, outcome, first_time, shot_type, body_part, location_x, location_y))
 

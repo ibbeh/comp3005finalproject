@@ -178,7 +178,7 @@ CREATE TABLE Substitutions (
 --PENDING APPROVAL
 CREATE TABLE Shots (
     event_id VARCHAR(255) PRIMARY KEY,
-    outcome BOOLEAN,
+    outcome varchar(255),
     first_time BOOLEAN,
     shot_type VARCHAR(255),
     body_part VARCHAR(255),
