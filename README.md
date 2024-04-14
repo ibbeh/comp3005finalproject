@@ -32,7 +32,7 @@ COMP_3005_Final_Project/
 ├── json_loader/
 │   ├── 1-seasons.py/
 │   ├── ...
-│   └── seasonMatchIDsExtractor.py/
+│   └── 28-pressures.py/
 │
 ├── queries.sql/
 │
