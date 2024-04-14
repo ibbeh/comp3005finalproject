@@ -2,7 +2,6 @@ import os
 import json
 import psycopg2
 
-# Establish database connection
 def connect_db():
     return psycopg2.connect(
         dbname="FUTSTATS",
@@ -12,7 +11,6 @@ def connect_db():
         port="5432"
     )
 
-# Parse substitutions
 def parse_substitutions(data):
     for event in data:
         if event['type']['name'] == 'Substitution':
@@ -25,8 +23,6 @@ def parse_substitutions(data):
                 'season_id': event.get('season_id', None)
             }
 
-
-# Parse shots
 def parse_shots(data):
     for event in data:
         if event['type']['name'] == 'Shot':
@@ -40,7 +36,6 @@ def parse_shots(data):
                 'shot_location_y': event['location'][1]
             }
 
-# Parse passes
 def parse_passes(data):
     for event in data:
         if event['type']['name'] == 'Pass':
@@ -73,7 +68,6 @@ def process_files(directory):
             with open(os.path.join(directory, filename), 'r') as file:
                 data = json.load(file)
 
-            # Process each type of event
             for substitution in parse_substitutions(data):
                 insert_data(cursor, 'Substitutions', substitution)
             for shot in parse_shots(data):
