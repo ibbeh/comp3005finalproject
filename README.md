@@ -76,7 +76,7 @@ To populate the database correctly, run the Python scripts located in src/ in th
 - For detailed information including the ER model, database schema, and additional project details, please refer to our Project Report https://docs.google.com/document/d/1cvFwiHebgy-iq0zfb6QTHr2Ubg-0gJ6eFI7Iu-wkEOs/edit?usp=sharing.
 - 
 ## Submission and Grading
-This project is submitted through a Google Form link, adhering to the due date of April 10th, 2024 (11:59 PM). Grading will focus on the report, query correctness, and efficiency as outlined in the project specification document.
+This project is submitted through a Google Form link. Grading will focus on the report, query correctness, and efficiency as outlined in the project specification document.
 
 Important: Ensure your PostgreSQL database is configured and running with the correct credentials as specified in the project documentation.
 
