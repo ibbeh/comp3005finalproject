@@ -32,24 +32,16 @@ for season_file in season_files:
                     with open(event_file_path, 'r', encoding='utf-8') as event_file:
                         events = json.load(event_file)
                         for event in events:
-                            try:
-                                if event.get('type', {}).get('name') == 'Goal':
-                                    event_id = event['id']
-                                    goal_type = event['type']['name']
-                                    assist_event_id = event.get('assist', {}).get('id')
-                                    shot_id = event.get('shot', {}).get('id')
-                                    
-                                    data_tuple = (event_id, goal_type, assist_event_id, shot_id)
-                                    cursor.execute(insert_goal_sql, data_tuple)
-                            except Exception as e:
-                                print("Failed to insert data:", e)
-                                continue
+                            if event.get('type', {}).get('name') == 'Goal':
+                                event_id = event['id']
+                                goal_type = event['type']['name']
+                                shot_info = event.get('shot', {})
+                                shot_id = shot_info.get('id', None)
+                                
+                                data_tuple = (event_id, goal_type, shot_id)
+                                cursor.execute(insert_goal_sql, data_tuple)
 
-# Commit changes and close the connection
-try:
-    conn.commit()
-    cursor.close()
-    conn.close()
-    print("Goal data successfully processed and inserted into the database.")
-except Exception as e:
-    print("Error during commit or connection close:", e)
+conn.commit()
+cursor.close()
+conn.close()
+print("Goal data successfully processed and inserted into the database.")
