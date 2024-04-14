@@ -16,8 +16,8 @@ season_files = ['90.json', '44.json', '42.json', '4.json']
 events_path = os.path.join(base_dir, 'events')
 
 insert_sql = """
-INSERT INTO Goals (event_id, goal_type, shot_id)
-VALUES (%s, %s, %s) ON CONFLICT (event_id) DO NOTHING;
+INSERT INTO Duels (event_id, type, outcome, under_pressure)
+VALUES (%s, %s, %s, %s) ON CONFLICT (event_id) DO NOTHING;
 """
 
 for season_file in season_files:
@@ -32,17 +32,17 @@ for season_file in season_files:
                     with open(event_file_path, 'r', encoding='utf-8') as event_file:
                         events = json.load(event_file)
                         for event in events:
-                            if event.get('type', {}).get('name') == 'Shot':
-                                shot_outcome = event['shot'].get('outcome', {}).get('name')
-                                if shot_outcome == 'Goal':
-                                    event_id = event['id']
-                                    goal_type = event['shot']['type']['name']
-                                    shot_id = event['shot'].get('key_pass_id', None)
+                            if event.get('type', {}).get('name') == 'Duel':
+                                event_id = event['id']
+                                duel_type = event['duel']['type']['name']
+                                outcome = event['duel'].get('outcome', {}).get('name', 'Unknown')
+                                under_pressure = event.get('under_pressure', False)
 
-                                    cursor.execute(insert_sql, (event_id, goal_type, shot_id))
+                                cursor.execute(insert_sql, (event_id, duel_type, outcome, under_pressure))
 
 conn.commit()
 cursor.close()
 conn.close()
 
-print("Goal events data successfully processed and inserted into the database.")
+print("Duel events data successfully processed and inserted into the database.")
+
