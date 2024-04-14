@@ -16,7 +16,7 @@ conn = psycopg2.connect(**db_params)
 cursor = conn.cursor()
 
 # Path to your lineup subfolder
-lineup_path = 'C:/codeYearTwo/3005_final/data/lineups'
+lineup_path = '../../data/lineups'
 
 # SQL to query season_id and competition_id from Matches table
 query_season_competition_sql = """

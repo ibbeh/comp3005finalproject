@@ -17,7 +17,7 @@ conn = psycopg2.connect(**db_params)
 cursor = conn.cursor()
 
 # Path to your JSON files
-json_directory = 'C:/codeYearTwo/3005_final/data'
+json_directory = '../../data'
 
 # Function to process each JSON file and update the Teams table
 def process_json(file_name):

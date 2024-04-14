@@ -16,7 +16,7 @@ conn = psycopg2.connect(**db_params)
 cursor = conn.cursor()
 
 # Path to your events subfolder
-events_path = 'C:/codeYearTwo/3005_final/data/events'
+events_path = '../../data/events'
 
 # Helper function to get player xG
 def update_player_xg(player_id, xg_value, season_id, competition_id):
