@@ -128,40 +128,6 @@ CREATE TABLE Events (
     FOREIGN KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
-
-CREATE TABLE Player_Statistics (
-    stat_id SERIAL PRIMARY KEY,
-    shots INTEGER,
-    passes INTEGER,
-    goals INTEGER,
-    assists INTEGER,
-    dribbles INTEGER,
-    tackles INTEGER,
-    saves INTEGER,
-	match_id INTEGER,
-	player_id INTEGER,
-    red_cards INTEGER,
-    yellow_cards INTEGER,
-    competition_id INTEGER,
-    season_id INTEGER,
-    FOREIGN KEY (match_id) REFERENCES Matches(match_id),
-    FOREIGN KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
-);
-
-CREATE TABLE Team_Statistics (
-	team_id INTEGER,
-	match_id INTEGER,
-    team_stat_id SERIAL PRIMARY KEY,
-    possession_percentage DECIMAL(5,2),
-    passes_completed INTEGER,
-    tackles INTEGER,
-    shots_on_target INTEGER,
-    competition_id INTEGER,
-    season_id INTEGER,
-    FOREIGN KEY (team_id) REFERENCES Teams(team_id),
-    FOREIGN KEY (match_id) REFERENCES Matches(match_id)
-);
-
 --PENDING APPROVAL
 CREATE TABLE Substitutions (
     event_id VARCHAR(255) PRIMARY KEY,
@@ -325,9 +291,7 @@ CREATE TABLE Cards (
 CREATE TABLE Fouls (
     event_id VARCHAR(255) PRIMARY KEY,
     foul_type VARCHAR(255),
-    player_fouling_id INTEGER,
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (player_fouling_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 --PENDING APPROVAL
