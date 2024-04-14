@@ -154,7 +154,6 @@ CREATE TABLE Shots (
 
 CREATE TABLE Passes (
     event_id VARCHAR(255) PRIMARY KEY,
-    pass_type VARCHAR(255),
     pass_technique VARCHAR(255),
     successful BOOLEAN,
     length DECIMAL(5,2),
@@ -162,12 +161,16 @@ CREATE TABLE Passes (
     height VARCHAR(255),
     end_location_x DECIMAL(5,2),
     end_location_y DECIMAL(5,2),
-    recipient_id INTEGER,
-    season_id INTEGER,
-    competition_id INTEGER,
     body_part VARCHAR (255),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (recipient_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+CREATE TABLE Ball_Receipts (
+    event_id VARCHAR(255) PRIMARY KEY,
+    successful BOOLEAN,
+    location_x DECIMAL(5,2),
+    location_y DECIMAL(5,2),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 CREATE TABLE xGoals (
@@ -178,6 +181,16 @@ CREATE TABLE xGoals (
     PRIMARY KEY (player_id, season_id, competition_id)
 );
 
+CREATE TABLE Dribbles (
+    event_id VARCHAR(255) PRIMARY KEY,
+    success BOOLEAN,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+CREATE TABLE Dribbled_Past (
+    event_id VARCHAR(255) PRIMARY KEY,
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
 
 CREATE TABLE Goals (
     event_id VARCHAR(255) PRIMARY KEY,
@@ -267,15 +280,6 @@ CREATE TABLE Throw_Ins (
 );
 
 
-
-CREATE TABLE Ball_Receipts (
-    event_id VARCHAR(255) PRIMARY KEY,
-    pass_from_id VARCHAR(255),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (pass_from_id) REFERENCES Events(event_id)
-);
-
-
 CREATE TABLE Cards (
     event_id VARCHAR(255) PRIMARY KEY,
     card_type VARCHAR(255),
@@ -291,13 +295,6 @@ CREATE TABLE Fouls (
 
 CREATE TABLE Offsides (
     event_id VARCHAR(255) PRIMARY KEY,
-    FOREIGN KEY (event_id) REFERENCES Events(event_id)
-);
-
-
-CREATE TABLE Dribbles (
-    event_id VARCHAR(255) PRIMARY KEY,
-    success BOOLEAN,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
@@ -321,11 +318,6 @@ CREATE TABLE Injury_Stoppage (
 );
 
 CREATE TABLE Pressure (
-    event_id VARCHAR(255) PRIMARY KEY,
-    FOREIGN KEY (event_id) REFERENCES Events(event_id)
-);
-
-CREATE TABLE Dribbled_Past (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );

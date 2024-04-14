@@ -2,24 +2,20 @@ import json
 import psycopg2
 import os
 
-# Database connection setup
 host = "localhost"
 database = input("DB Name: ")
 user = input("DB User: ")
 password = input("DB Password: ")
 port = "5432"
 
-# Connect to PostgreSQL database
 conn = psycopg2.connect(host=host, database=database, user=user, password=password, port=port)
 cursor = conn.cursor()
 
-# SQL command to insert matches
 insert_match_sql = """
 INSERT INTO Matches (match_id, match_date, kick_off, season_id, competition_id, home_team_id, home_manager_id, away_team_id, away_manager_id, home_score, away_score, match_week, competition_stage_id, stadium_id, referee_id)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (match_id) DO NOTHING;
 """
 
-# Function to process each season's JSON file for matches
 def process_json(filepath):
     with open(filepath, 'r', encoding='utf-8') as file:
         data = json.load(file)
@@ -48,11 +44,9 @@ def process_json(filepath):
             matches.append(match_data)
         return matches
 
-# Directory and file handling
 base_dir = '../json_loader'
-season_files = ['4.json', '42.json', '44.json', '90.json']  # Specific season JSON files
+season_files = ['4.json', '42.json', '44.json', '90.json'] 
 
-# Process each specified season file for matches
 for season_file in season_files:
     filepath = os.path.join(base_dir, season_file)
     if os.path.exists(filepath):
@@ -60,7 +54,6 @@ for season_file in season_files:
         for entry in match_entries:
             cursor.execute(insert_match_sql, entry)
 
-# Commit changes and close the database connection
 conn.commit()
 cursor.close()
 conn.close()

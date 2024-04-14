@@ -3,29 +3,24 @@ import psycopg2
 import os
 from datetime import datetime
 
-# Database connection setup
 host = "localhost"
 database = input("DB Name: ")
 user = input("DB User: ")
 password = input("DB Password: ")
 port = "5432"
 
-# Connect to PostgreSQL database
 conn = psycopg2.connect(host=host, database=database, user=user, password=password, port=port)
 cursor = conn.cursor()
 
-# Prepare the SQL statement for inserting event data
 insert_event_sql = """
 INSERT INTO Events (event_id, match_id, type, period, timestamp, minute, second, team_id, player_id, location_x, location_y, competition_id, season_id)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (event_id) DO NOTHING;
 """
 
-# Paths configuration
 base_dir = '../json_loader'
 season_files = ['90.json', '44.json', '42.json', '4.json']
 events_path = os.path.join(base_dir, 'events')
 
-# Extract match_ids from season files and process corresponding events
 for season_file in season_files:
     filepath = os.path.join(base_dir, season_file)
     if os.path.exists(filepath):
@@ -55,7 +50,6 @@ for season_file in season_files:
                             data_tuple = (event_id, match_id, event_type, period, timestamp, minute, second, team_id, player_id, location_x, location_y, competition_id, season_id)
                             cursor.execute(insert_event_sql, data_tuple)
                             
-# Commit changes and close the database connection
 conn.commit()
 cursor.close()
 conn.close()

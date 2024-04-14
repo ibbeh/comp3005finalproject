@@ -2,28 +2,24 @@ import json
 import psycopg2
 import os
 
-# Database connection setup
 host = "localhost"
 database = input("DB Name: ")
 user = input("DB User: ")
 password = input("DB Password: ")
 port = "5432"
 
-# Connect to PostgreSQL database
 conn = psycopg2.connect(host=host, database=database, user=user, password=password, port=port)
 cursor = conn.cursor()
 
-# SQL to insert unique referees
 insert_sql = """
 INSERT INTO Referees (referee_id, referee_name, country_id)
 VALUES (%s, %s, %s) ON CONFLICT (referee_id) DO NOTHING;
 """
 
 base_dir = '../json_loader'
-season_files = ['90.json', '44.json', '42.json', '4.json']  # Specific season JSON files
-seen_referees = {}  # To track unique referees
+season_files = ['90.json', '44.json', '42.json', '4.json']  
+seen_referees = {}  
 
-# Process each specified season file
 for season_file in season_files:
     filepath = os.path.join(base_dir, season_file)
     if os.path.exists(filepath):
@@ -35,12 +31,10 @@ for season_file in season_files:
                 if referee_id and referee_id not in seen_referees:
                     referee_name = referee_info.get('name')
                     country_id = referee_info.get('country', {}).get('id')
-                    # Insert unique referee into the database
                     cursor.execute(insert_sql, (referee_id, referee_name, country_id))
                     seen_referees[referee_id] = referee_name
                     print(f"Inserted referee: {referee_name}")
 
-# Commit changes and close the database connection
 conn.commit()
 cursor.close()
 conn.close()
