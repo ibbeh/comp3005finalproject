@@ -18,11 +18,7 @@ Before you begin, ensure you have the following software installed:
 - Python 3.x for script execution
 
 ## Setup Instructions
-1. **Database Setup:** Create a PostgreSQL database using pgAdmin.
-Run the SQL script dbexport.sql to create tables and initialize schemas.
-2. **Data Importation:** Ensure JSON data files are prepared in the data/events and data/lineups directories. Python scripts must be run in the specified order to correctly populate the database.
-
-Note: deleteMatches.py and seasonMatchIDsExtractor.py are used to manage data selectively based on project requirements. Execute these scripts as needed to adjust the dataset.
+1. **Database Setup:** Create a PostgreSQL database using dbexports.sql with pgadmin
 
 
 # Directory Structure 
