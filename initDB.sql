@@ -24,7 +24,6 @@ CREATE TABLE Managers (
     FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
 
-
 CREATE TABLE Stadiums (
     stadium_id INT PRIMARY KEY,
     stadium_name VARCHAR(255),
@@ -32,15 +31,12 @@ CREATE TABLE Stadiums (
     FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
 
-
 CREATE TABLE Referees (
     referee_id INT PRIMARY KEY,
     referee_name VARCHAR(255),
     country_id INTEGER,
     FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
-
-
 
 CREATE TABLE Teams (
     team_id INTEGER PRIMARY KEY,
@@ -55,13 +51,10 @@ CREATE TABLE Teams (
     FOREIGN KEY (season_id, competition_id) REFERENCES Seasons(season_id, competition_id)
 );
 
-
-
 CREATE TABLE Positions (
     position_id INTEGER PRIMARY KEY,
     position_name VARCHAR(255)
 );
-
 
 CREATE TABLE Players (
     player_id INTEGER,
@@ -80,8 +73,6 @@ CREATE TABLE Players (
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
     FOREIGN KEY (season_id, competition_id) REFERENCES Seasons(season_id, competition_id)
 );
-
-
 
 CREATE TABLE Matches (
     match_id INTEGER PRIMARY KEY,
@@ -105,7 +96,6 @@ CREATE TABLE Matches (
 
 );
 
-
 CREATE TABLE Events (
     event_id VARCHAR(255) PRIMARY KEY,
     match_id INTEGER,
@@ -125,7 +115,6 @@ CREATE TABLE Events (
     FOREIGN KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
-
 CREATE TABLE Substitutions (
     event_id VARCHAR(255) PRIMARY KEY,
     player_out_id INTEGER,
@@ -138,8 +127,6 @@ CREATE TABLE Substitutions (
     FOREIGN KEY (player_in_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
-
-
 CREATE TABLE Shots (
     event_id VARCHAR(255) PRIMARY KEY,
     outcome varchar(255),
@@ -150,7 +137,6 @@ CREATE TABLE Shots (
     shot_location_y DECIMAL(5,2),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
-
 
 CREATE TABLE Passes (
     event_id VARCHAR(255) PRIMARY KEY,
@@ -207,13 +193,11 @@ CREATE TABLE Saves (
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
-
 CREATE TABLE Tackles (
     event_id VARCHAR(255) PRIMARY KEY,
     outcome BOOLEAN,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
-
 
 CREATE TABLE Duels (
     event_id VARCHAR(255) PRIMARY KEY,
