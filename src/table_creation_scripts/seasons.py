@@ -1,5 +1,6 @@
 import json
 import psycopg2
+import os
 
 # Database connection parameters
 host = "localhost"
@@ -27,7 +28,6 @@ with open('../../data/competitions.json', 'r', encoding='utf-8') as file:
     for entry in competitions:
         comp_id = entry['competition_id']
         season_id = entry['season_id']
-        # Check if the current entry's id pair is in the list of target pairs
         if (comp_id, season_id) in target_pairs:
             data = (
                 comp_id,

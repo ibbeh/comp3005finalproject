@@ -15,7 +15,7 @@ conn = psycopg2.connect(**db_params)
 cursor = conn.cursor()
 
 # Path to your events subfolder within the data directory
-events_path = 'C:/codeYearTwo/3005_final/data/events'
+events_path = '../../data/events'
 
 # Prepare SQL for fetching competition_id and season_id based on match_id
 query_match_details_sql = """

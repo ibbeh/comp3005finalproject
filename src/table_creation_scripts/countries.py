@@ -20,7 +20,7 @@ VALUES (%s, %s) ON CONFLICT (country_id) DO NOTHING;
 """
 
 # Define the base directory where the data folders are located
-base_dir = 'C:/codeYearTwo/3005_final/data'
+base_dir = '../../data'
 
 # Walk through each directory in the base directory
 for dirpath, dirnames, filenames in os.walk(base_dir):

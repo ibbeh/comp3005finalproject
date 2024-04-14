@@ -86,5 +86,5 @@ def process_files(directory):
     conn.close()
 
 if __name__ == "__main__":
-    directory = "C:/codeYearTwo/3005_final/data/events"
+    directory = "../../data/events"
     process_files(directory)
