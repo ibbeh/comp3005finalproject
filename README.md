@@ -29,22 +29,14 @@ Note: deleteMatches.py and seasonMatchIDsExtractor.py are used to manage data se
 ```
 COMP_3005_Final_Project/
 │
-├── data/
-│   ├── events/
-│   └── lineups/
+├── json_loader/
+│   ├── 1-seasons.py/
+│   ├── ...
+│   └── seasonMatchIDsExtractor.py/
 │
-├── docs/
+├── queries.sql/
 │
-├── sql/
-│   └── dbexport.sql
-│
-├── src/
-│   ├── out/
-│   ├── table_creation_scripts/
-│   ├── deleteMatches.py
-│   └── seasonMatchIDsExtractor.py
-│
-├── tests/
+├── dbexport.sql/
 │
 └── README.md
 
