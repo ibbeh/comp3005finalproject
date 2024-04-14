@@ -76,11 +76,11 @@ CREATE TABLE Players (
     team_id INTEGER,
     position_id INTEGER,
     num_matches_played INTEGER,
+    PRIMARY KEY (player_id, season_id, competition_id),
     FOREIGN KEY (position_id) REFERENCES Positions(position_id),
     FOREIGN KEY (country_id) REFERENCES Countries(country_id),
     FOREIGN KEY (team_id) REFERENCES Teams(team_id),
-    FOREIGN KEY (season_id, competition_id) REFERENCES Seasons(season_id, competition_id),
-    PRIMARY KEY (player_id, season_id, competition_id)
+    FOREIGN KEY (season_id, competition_id) REFERENCES Seasons(season_id, competition_id)
 );
 
 
@@ -171,9 +171,10 @@ CREATE TABLE Substitutions (
     competition_id INTEGER,
     season_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (player_out_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
+    FOREIGN KEY (player_out_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id),
     FOREIGN KEY (player_in_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
+
 
 --PENDING APPROVAL
 CREATE TABLE Shots (
@@ -199,6 +200,8 @@ CREATE TABLE Passes (
     end_location_x DECIMAL(5,2),
     end_location_y DECIMAL(5,2),
     recipient_id INTEGER,
+    season_id INTEGER,
+    competition_id INTEGER,
     body_part VARCHAR (255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (recipient_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
@@ -209,7 +212,7 @@ CREATE TABLE xGoals (
     total_xg DECIMAL(5,2),
     competition_id INTEGER,
     season_id INTEGER,
-    PRIMARY KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
+    PRIMARY KEY (player_id, season_id, competition_id)
 );
 
 --PENDING APPROVAL

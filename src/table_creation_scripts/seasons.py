@@ -1,5 +1,6 @@
 import json
 import psycopg2
+import os
 
 # Database connection parameters
 host = "localhost"
@@ -21,13 +22,16 @@ VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (competition_id, season_id) 
 # Define the specific competition_id and season_id pairs to filter on
 target_pairs = {(11, 4), (11, 42), (2, 44), (11, 90)}
 
+# Assuming the script is in the 'src/table_creation' subdirectory, and the data folder is parallel to 'src'
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+data_path = os.path.join(project_root, 'data', 'competitions.json')
+
 # Load and parse competitions.json
-with open('../../data/competitions.json', 'r', encoding='utf-8') as file:
+with open(data_path, 'r', encoding='utf-8') as file:
     competitions = json.load(file)
     for entry in competitions:
         comp_id = entry['competition_id']
         season_id = entry['season_id']
-        # Check if the current entry's id pair is in the list of target pairs
         if (comp_id, season_id) in target_pairs:
             data = (
                 comp_id,
