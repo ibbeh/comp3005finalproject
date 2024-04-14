@@ -46,7 +46,8 @@ COMP_3005_Final_Project/
 -use queries.py in conjuction with dbexport.sql
 -
 - For detailed information including the ER model, database schema, and additional project details, please refer to our Project Report https://docs.google.com/document/d/1cvFwiHebgy-iq0zfb6QTHr2Ubg-0gJ6eFI7Iu-wkEOs/edit?usp=sharing.
-- 
+
+
 ## Submission and Grading
 This project is submitted through a Google Form link. Grading will focus on the report, query correctness, and efficiency as outlined in the project specification document.
 
