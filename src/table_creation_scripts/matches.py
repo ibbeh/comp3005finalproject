@@ -4,28 +4,23 @@ import psycopg2
 from psycopg2.extras import execute_values
 from psycopg2 import sql
 
-# Database connection parameters
 db_params = {
-    'dbname': 'FUTDB',
+    'dbname': 'FUTSTATS',
     'user': 'postgres',
     'password': 'Kuwait$22',
     'host': 'localhost'
 }
 
-# Connect to your PostgreSQL database
 conn = psycopg2.connect(**db_params)
 cursor = conn.cursor()
 
-# Path to your JSON files
-json_directory = 'C:/codeYearTwo/3005_final/data'
+json_directory = '../../data'
 
-# Function to process each JSON file and update the Matches table
 def process_json(file_name):
     with open(os.path.join(json_directory, file_name), 'r', encoding='utf-8') as file:
         data = json.load(file)
         matches = []
         for match in data:
-            # Using get for optional fields like stadium and referee
             stadium_id = match.get('stadium', {}).get('id')
             referee_id = match.get('referee', {}).get('id')
             
@@ -48,7 +43,6 @@ def process_json(file_name):
             )
             matches.append(match_data)
 
-        # Insert/update query
         insert_query = sql.SQL("""
             INSERT INTO Matches (match_id, match_date, kick_off, season_id, competition_id, home_team_id, home_manager_id, away_team_id, away_manager_id, home_score, away_score, match_week, competition_stage_id, stadium_id, referee_id)
             VALUES %s
@@ -72,13 +66,10 @@ def process_json(file_name):
         execute_values(cursor, insert_query, matches)
         conn.commit()
 
-# List JSON files excluding 'competitions.json'
 json_files = [f for f in os.listdir(json_directory) if f.endswith('.json') and f != 'competitions.json']
 
-# Process each file
 for json_file in json_files:
     process_json(json_file)
 
-# Close the database connection
 cursor.close()
 conn.close()

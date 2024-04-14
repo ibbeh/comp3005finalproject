@@ -9,4 +9,5 @@ Order of running the scripts:
 7. player_positions.py
 8. matches.py
 9. events.py
-10. 
+10. unique_events_1.py
+11. unique_events_2.py
