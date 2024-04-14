@@ -162,17 +162,17 @@ CREATE TABLE Team_Statistics (
     FOREIGN KEY (match_id) REFERENCES Matches(match_id)
 );
 
-
-
 --PENDING APPROVAL
 CREATE TABLE Substitutions (
     event_id VARCHAR(255) PRIMARY KEY,
     player_out_id INTEGER,
     player_in_id INTEGER,
     reason VARCHAR(255),
+    competition_id INTEGER,
+    season_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
     FOREIGN KEY (player_out_id) REFERENCES Players(player_id),
-    FOREIGN KEY (player_in_id) REFERENCES Players(player_id)
+    FOREIGN KEY (player_in_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
 --PENDING APPROVAL
@@ -201,13 +201,15 @@ CREATE TABLE Passes (
     recipient_id INTEGER,
     body_part VARCHAR (255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (recipient_id) REFERENCES Players(player_id)
+    FOREIGN KEY (recipient_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
 CREATE TABLE xGoals (
     player_id INTEGER,
-    total_xg DECIMAL(5,2) PRIMARY KEY,
-    FOREIGN KEY (player_id) REFERENCES Players(player_id)
+    total_xg DECIMAL(5,2),
+    competition_id INTEGER,
+    season_id INTEGER,
+    PRIMARY KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
 --PENDING APPROVAL
@@ -322,7 +324,7 @@ CREATE TABLE Fouls (
     foul_type VARCHAR(255),
     player_fouling_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (player_fouling_id) REFERENCES Players(player_id)
+    FOREIGN KEY (player_fouling_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
 --PENDING APPROVAL

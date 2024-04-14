@@ -1,6 +1,7 @@
 import os
 import json
 import psycopg2
+from decimal import Decimal  # Import Decimal at the beginning of the script
 
 # Database connection parameters
 db_params = {
@@ -18,14 +19,14 @@ cursor = conn.cursor()
 events_path = 'C:/codeYearTwo/3005_final/data/events'
 
 # Helper function to get player xG
-def update_player_xg(player_id, xg_value):
-    cursor.execute("SELECT total_xg FROM xGoals WHERE player_id = %s;", (player_id,))
+def update_player_xg(player_id, xg_value, season_id, competition_id):
+    cursor.execute("SELECT total_xg FROM xGoals WHERE player_id = %s AND season_id = %s AND competition_id = %s;", (player_id, season_id, competition_id))
     result = cursor.fetchone()
     if result:
-        new_xg = result[0] + xg_value
-        cursor.execute("UPDATE xGoals SET total_xg = %s WHERE player_id = %s;", (new_xg, player_id))
+        new_xg = result[0] + Decimal(xg_value)
+        cursor.execute("UPDATE xGoals SET total_xg = %s WHERE player_id = %s AND season_id = %s AND competition_id = %s;", (new_xg, player_id, season_id, competition_id))
     else:
-        cursor.execute("INSERT INTO xGoals (player_id, total_xg) VALUES (%s, %s);", (player_id, xg_value))
+        cursor.execute("INSERT INTO xGoals (player_id, total_xg, season_id, competition_id) VALUES (%s, %s, %s, %s);", (player_id, Decimal(xg_value), season_id, competition_id))
 
 # Process each JSON file
 for filename in os.listdir(events_path):
@@ -37,11 +38,15 @@ for filename in os.listdir(events_path):
                 event_id = event['id']
                 event_type = event.get('type', {}).get('name')
                 
+                # Assume season_id and competition_id are provided in each event
+                season_id = event.get('season_id')
+                competition_id = event.get('competition_id')
+
                 # Handling xGoals within Shot events
                 if event_type == 'Shot':
                     player_id = event.get('player', {}).get('id')
                     xg_value = event.get('shot', {}).get('statsbomb_xg', 0)
-                    update_player_xg(player_id, xg_value)
+                    update_player_xg(player_id, xg_value, season_id, competition_id)
 
                 # Handling Goals
                 if event_type == 'Goal':
