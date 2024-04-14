@@ -15,7 +15,6 @@ CREATE TABLE Countries (
 	country_name VARCHAR(255)
 );
 
---FINISHED
 CREATE TABLE Managers (
     manager_id INT PRIMARY KEY,
     manager_name VARCHAR(255),
@@ -26,7 +25,6 @@ CREATE TABLE Managers (
 );
 
 
---FINISHED
 CREATE TABLE Stadiums (
     stadium_id INT PRIMARY KEY,
     stadium_name VARCHAR(255),
@@ -34,7 +32,7 @@ CREATE TABLE Stadiums (
     FOREIGN KEY (country_id) REFERENCES Countries(country_id)
 );
 
---FINISHED
+
 CREATE TABLE Referees (
     referee_id INT PRIMARY KEY,
     referee_name VARCHAR(255),
@@ -43,7 +41,7 @@ CREATE TABLE Referees (
 );
 
 
---FINISHED
+
 CREATE TABLE Teams (
     team_id INTEGER PRIMARY KEY,
     team_name VARCHAR(255) NOT NULL,
@@ -58,13 +56,13 @@ CREATE TABLE Teams (
 );
 
 
---FINISHED
+
 CREATE TABLE Positions (
     position_id INTEGER PRIMARY KEY,
     position_name VARCHAR(255)
 );
 
---FINISHED
+
 CREATE TABLE Players (
     player_id INTEGER,
     season_id INTEGER,
@@ -85,7 +83,6 @@ CREATE TABLE Players (
 
 
 
---FINISHED
 CREATE TABLE Matches (
     match_id INTEGER PRIMARY KEY,
     match_date DATE,
@@ -108,7 +105,7 @@ CREATE TABLE Matches (
 
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Events (
     event_id VARCHAR(255) PRIMARY KEY,
     match_id INTEGER,
@@ -128,7 +125,7 @@ CREATE TABLE Events (
     FOREIGN KEY (player_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Substitutions (
     event_id VARCHAR(255) PRIMARY KEY,
     player_out_id INTEGER,
@@ -142,7 +139,7 @@ CREATE TABLE Substitutions (
 );
 
 
---PENDING APPROVAL
+
 CREATE TABLE Shots (
     event_id VARCHAR(255) PRIMARY KEY,
     outcome varchar(255),
@@ -154,7 +151,7 @@ CREATE TABLE Shots (
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Passes (
     event_id VARCHAR(255) PRIMARY KEY,
     pass_type VARCHAR(255),
@@ -181,7 +178,7 @@ CREATE TABLE xGoals (
     PRIMARY KEY (player_id, season_id, competition_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Goals (
     event_id VARCHAR(255) PRIMARY KEY,
     goal_type VARCHAR(255),
@@ -192,7 +189,7 @@ CREATE TABLE Goals (
     FOREIGN KEY (shot_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Penalties (
     event_id VARCHAR(255) PRIMARY KEY,
     goal_id VARCHAR(255) NULL,
@@ -226,21 +223,19 @@ CREATE TABLE Goal_Kick (
 );
 
 
---PENDING APPROVAL
 CREATE TABLE Saves (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
---PENDING APPROVAL
 CREATE TABLE Tackles (
     event_id VARCHAR(255) PRIMARY KEY,
     outcome BOOLEAN,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Duels (
     event_id VARCHAR(255) PRIMARY KEY,
     type VARCHAR(255),
@@ -265,14 +260,14 @@ CREATE TABLE Interceptions (
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Throw_Ins (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
---PENDING APPROVAL
+
 CREATE TABLE Ball_Receipts (
     event_id VARCHAR(255) PRIMARY KEY,
     pass_from_id VARCHAR(255),
@@ -280,27 +275,26 @@ CREATE TABLE Ball_Receipts (
     FOREIGN KEY (pass_from_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Cards (
     event_id VARCHAR(255) PRIMARY KEY,
     card_type VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Fouls (
     event_id VARCHAR(255) PRIMARY KEY,
     foul_type VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
 CREATE TABLE Offsides (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
---PENDING APPROVAL
+
 CREATE TABLE Dribbles (
     event_id VARCHAR(255) PRIMARY KEY,
     success BOOLEAN,
@@ -308,14 +302,12 @@ CREATE TABLE Dribbles (
 );
 
 
---PENDING APPROVAL
 CREATE TABLE Ball_Recovery (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 
---PENDING APPROVAL
 CREATE TABLE Carries (
     event_id VARCHAR(255) PRIMARY KEY,
     end_location_x DECIMAL(5,2),
