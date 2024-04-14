@@ -2,27 +2,22 @@ import json
 import psycopg2
 import os
 
-# Database connection parameters
 host = "localhost"
 database = input("DB Name: ")
 user = input("DB User: ")
 password = input("DB Password: ")
 port = "5432"
 
-# Connect to PostgreSQL
 conn = psycopg2.connect(host=host, database=database, user=user, password=password, port=port)
 cursor = conn.cursor()
 
-# SQL for inserting data
 insert_sql = """
 INSERT INTO Seasons (competition_id, season_id, competition_name, season_name, country_name, competition_gender, competition_youth, competition_international)
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s) ON CONFLICT (competition_id, season_id) DO NOTHING;
 """
 
-# Define the specific competition_id and season_id pairs to filter on
 target_pairs = {(11, 4), (11, 42), (2, 44), (11, 90)}
 
-# Load and parse competitions.json
 with open('../../data/competitions.json', 'r', encoding='utf-8') as file:
     competitions = json.load(file)
     for entry in competitions:
@@ -41,7 +36,6 @@ with open('../../data/competitions.json', 'r', encoding='utf-8') as file:
             )
             cursor.execute(insert_sql, data)
 
-# Commit changes and close the connection
 conn.commit()
 cursor.close()
 conn.close()

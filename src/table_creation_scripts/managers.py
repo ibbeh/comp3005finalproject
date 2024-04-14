@@ -34,15 +34,12 @@ dob = EXCLUDED.dob,
 country_id = EXCLUDED.country_id;
 """
 
-
-# Process each JSON file in the specified directory
 json_files = [f for f in os.listdir(json_directory) if f.endswith('.json') and f not in ['competitions.json']]
 for filename in json_files:
     file_path = os.path.join(json_directory, filename)
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
-    
-    # Prepare data for bulk inserts
+
     all_countries = set()
     all_managers = set()
     for match in data:
@@ -55,14 +52,11 @@ for filename in json_files:
                 if manager.get('id') and manager.get('country'):
                     all_managers.add((manager['id'], manager['name'], manager.get('nickname'), manager['dob'], manager['country']['id']))
 
-    # Bulk insert countries and managers
     execute_values(cursor, insert_country_sql, list(all_countries))
     execute_values(cursor, insert_manager_sql, list(all_managers))
 
-# Commit the transactions
 conn.commit()
 
-# Close the cursor and connection
 cursor.close()
 conn.close()
 
