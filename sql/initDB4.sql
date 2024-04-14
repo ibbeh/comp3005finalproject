@@ -171,7 +171,7 @@ CREATE TABLE Substitutions (
     competition_id INTEGER,
     season_id INTEGER,
     FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (player_out_id) REFERENCES Players(player_id),
+    FOREIGN KEY (player_out_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
     FOREIGN KEY (player_in_id, season_id, competition_id) REFERENCES Players(player_id, season_id, competition_id)
 );
 
