@@ -202,40 +202,6 @@ CREATE TABLE Goals (
     FOREIGN KEY (shot_id) REFERENCES Events(event_id)
 );
 
-
-CREATE TABLE Penalties (
-    event_id VARCHAR(255) PRIMARY KEY,
-    goal_id VARCHAR(255) NULL,
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (goal_id) REFERENCES Goals(event_id)
-);
-
-CREATE TABLE Free_Kick (
-    event_id VARCHAR(255) PRIMARY KEY,
-    goal_id VARCHAR(255) NULL,
-    pass_id VARCHAR(255) NULL,
-    body_part VARCHAR(255),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (goal_id) REFERENCES Goals(event_id),
-    FOREIGN KEY (pass_id) REFERENCES Events(event_id)
-);
-
-CREATE TABLE Corners (
-    event_id VARCHAR(255) PRIMARY KEY,
-    technique VARCHAR (255),
-    body_part VARCHAR (255),
-    outcome VARCHAR (255),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id)
-);
-
-CREATE TABLE Goal_Kick (
-    event_id VARCHAR(255) PRIMARY KEY,
-    pass_id VARCHAR(255) NULL,
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (pass_id) REFERENCES Events(event_id)
-);
-
-
 CREATE TABLE Saves (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
