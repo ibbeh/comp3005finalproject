@@ -175,6 +175,35 @@ CREATE TABLE Substitutions (
     FOREIGN KEY (player_in_id) REFERENCES Players(player_id)
 );
 
+--PENDING APPROVAL
+CREATE TABLE Shots (
+    event_id VARCHAR(255) PRIMARY KEY,
+    outcome varchar(255),
+    first_time BOOLEAN,
+    shot_type VARCHAR(255),
+    body_part VARCHAR(255),
+    shot_location_x DECIMAL(5,2),
+    shot_location_y DECIMAL(5,2),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id)
+);
+
+--PENDING APPROVAL
+CREATE TABLE Passes (
+    event_id VARCHAR(255) PRIMARY KEY,
+    pass_type VARCHAR(255),
+    pass_technique VARCHAR(255),
+    successful BOOLEAN,
+    length DECIMAL(5,2),
+    angle DECIMAL(5,2),
+    height VARCHAR(255),
+    end_location_x DECIMAL(5,2),
+    end_location_y DECIMAL(5,2),
+    recipient_id INTEGER,
+    body_part VARCHAR (255),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id),
+    FOREIGN KEY (recipient_id) REFERENCES Players(player_id)
+);
+
 CREATE TABLE xGoals (
     player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
@@ -266,23 +295,6 @@ CREATE TABLE Interceptions (
 );
 
 --PENDING APPROVAL
-CREATE TABLE Passes (
-    event_id VARCHAR(255) PRIMARY KEY,
-    pass_type VARCHAR(255),
-    successful BOOLEAN,
-    length DECIMAL(5,2),
-    angle DECIMAL(5,2),
-    height VARCHAR(255),
-    end_location_x DECIMAL(5,2),
-    end_location_y DECIMAL(5,2),
-    recipient_id INTEGER,
-    body_part VARCHAR (255),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (recipient_id) REFERENCES Players(player_id)
-);
-
-
---PENDING APPROVAL
 CREATE TABLE Throw_Ins (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
@@ -318,20 +330,6 @@ CREATE TABLE Offsides (
     event_id VARCHAR(255) PRIMARY KEY,
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
-
-
---PENDING APPROVAL
-CREATE TABLE Shots (
-    event_id VARCHAR(255) PRIMARY KEY,
-    outcome BOOLEAN,
-    first_time BOOLEAN,
-    shot_type VARCHAR(255),
-    body_part VARCHAR(255),
-    shot_location_x DECIMAL(5,2),
-    shot_location_y DECIMAL(5,2),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id)
-);
-
 
 --PENDING APPROVAL
 CREATE TABLE Dribbles (
