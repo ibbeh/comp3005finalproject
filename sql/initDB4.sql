@@ -187,6 +187,22 @@ CREATE TABLE Shots (
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
+--PENDING APPROVAL
+CREATE TABLE Passes (
+    event_id VARCHAR(255) PRIMARY KEY,
+    pass_type VARCHAR(255),
+    successful BOOLEAN,
+    length DECIMAL(5,2),
+    angle DECIMAL(5,2),
+    height VARCHAR(255),
+    end_location_x DECIMAL(5,2),
+    end_location_y DECIMAL(5,2),
+    recipient_id INTEGER,
+    body_part VARCHAR (255),
+    FOREIGN KEY (event_id) REFERENCES Events(event_id),
+    FOREIGN KEY (recipient_id) REFERENCES Players(player_id)
+);
+
 CREATE TABLE xGoals (
     player_id INTEGER,
     total_xg DECIMAL(5,2) PRIMARY KEY,
@@ -276,23 +292,6 @@ CREATE TABLE Interceptions (
     play_pattern VARCHAR(255),
     FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
-
---PENDING APPROVAL
-CREATE TABLE Passes (
-    event_id VARCHAR(255) PRIMARY KEY,
-    pass_type VARCHAR(255),
-    successful BOOLEAN,
-    length DECIMAL(5,2),
-    angle DECIMAL(5,2),
-    height VARCHAR(255),
-    end_location_x DECIMAL(5,2),
-    end_location_y DECIMAL(5,2),
-    recipient_id INTEGER,
-    body_part VARCHAR (255),
-    FOREIGN KEY (event_id) REFERENCES Events(event_id),
-    FOREIGN KEY (recipient_id) REFERENCES Players(player_id)
-);
-
 
 --PENDING APPROVAL
 CREATE TABLE Throw_Ins (
