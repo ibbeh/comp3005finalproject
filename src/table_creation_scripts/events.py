@@ -4,7 +4,7 @@ import psycopg2
 
 # Database connection parameters
 db_params = {
-    'dbname': 'FUTDB',
+    'dbname': 'FUTSTATS',
     'user': 'postgres',
     'password': 'Kuwait$22',
     'host': 'localhost'

@@ -8,9 +8,9 @@ def connect_to_db():
     try:
         print('Connecting to the PostgreSQL database...')
         conn = psycopg2.connect(
-            dbname="FUT_STATS",
+            dbname="FUTSTATS",
             user="postgres",
-            password="postgres",
+            password="Kuwait$22",
             host="localhost",
             port="5432"
         )

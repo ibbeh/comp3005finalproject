@@ -5,7 +5,7 @@ import psycopg2
 # Establish database connection
 def connect_db():
     return psycopg2.connect(
-        dbname="FUTDB",
+        dbname="FUTSTATS",
         user="postgres",
         password="Kuwait$22",
         host="localhost",

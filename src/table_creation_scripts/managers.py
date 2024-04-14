@@ -5,7 +5,7 @@ from psycopg2.extras import execute_values
 
 # Database connection parameters
 db_params = {
-    'dbname': 'FUTDB',
+    'dbname': 'FUTSTATS',
     'user': 'postgres',
     'password': 'Kuwait$22',
     'host': 'localhost'
