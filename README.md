@@ -43,28 +43,8 @@ COMP_3005_Final_Project/
 ```
 
 # Execution Instructions
-
-To populate the database correctly, run the Python scripts located in src/ in the following order:
-
-1. **seasons.py**
-2. **countries.py**
-3. **managers.py**
-4. **stadiums.py**
-5. **referees.py**
-6. **teams.py**
-7. **player_positions.py**
-8. **matches.py**
-9. **events.py**
-10. **unique_events_1.py**
-11. **unique_events_2.py**
-
-## Running Scripts and Queries:  
-1. **Script Execution**:
-- Navigate to the root directory of the project.
-- Execute Python scripts in the order listed above to populate the database: python src/seasons.py, etc.
-2. **Query Execution**:
-  - After populating the database, use pgAdmin or a similar tool to run queries directly against the PostgreSQL database.
-# Project Report
+-use queries.py in conjuction with dbexport.sql
+-
 - For detailed information including the ER model, database schema, and additional project details, please refer to our Project Report https://docs.google.com/document/d/1cvFwiHebgy-iq0zfb6QTHr2Ubg-0gJ6eFI7Iu-wkEOs/edit?usp=sharing.
 - 
 ## Submission and Grading
